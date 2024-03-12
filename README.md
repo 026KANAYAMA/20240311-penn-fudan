@@ -1,11 +1,13 @@
-## Datasets : Penn-Fudan Database for Pedestrian Detection and Segmentation
+## A Segmentation Task Using the Penn-Fudan Database, Following the PyTorch Tutorial.
+
+## Datasets
+- Penn-Fudan Database for Pedestrian Detection and Segmentation
 
 ## To Do
 - download zip from Web site [URL](https://www.cis.upenn.edu/%7Ejshi/ped_html/) using zip_downloader.py
 - unzip file using zip_unziper.py
 - follow tutorials
 - end
-
 
 ## References
 - data：[URL](https://www.cis.upenn.edu/%7Ejshi/ped_html/)
