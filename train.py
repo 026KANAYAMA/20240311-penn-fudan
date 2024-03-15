@@ -2,6 +2,8 @@
 学習、推論の実行、ヘルパー関数を利用した簡易版
 """
 import torch
+
+from step import train_step, val_step
 from references.detection.engine import train_one_epoch, evaluate
 from references.detection import utils, coco_eval, coco_utils
 from utils_pkg import PennFudanDataset, get_transform, get_model_instance_segmentation
@@ -42,15 +44,22 @@ optimizer = torch.optim.SGD(params, lr=0.005, momentum=0.9, weight_decay=0.0005)
 lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
 # let's train it for 10 epochs
-num_epochs = 2
+num_epochs = 10
+hist = {'loss':[], 'val_loss':[]}
 
 for epoch in range(num_epochs):
-    # train for one epoch, printing every 10 iterations
-    train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=2)
+    train_loss = 0
+
+    # train on the training dataset
+    for images, targets in data_loader:
+        train_loss += train_step(model, images, targets, optimizer, device)
+
+    train_loss /= len(data_loader)
+    hist['loss'].append(train_loss)
+    print(f"Epoch {epoch+1}: train_loss = {train_loss}")
+
     # update the learning rate
     lr_scheduler.step()
-    # evaluate on the test dataset
-    evaluate(model, data_loader_test, device=device)
 
 print("That's it!")
 
