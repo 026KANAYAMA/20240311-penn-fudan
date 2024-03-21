@@ -8,6 +8,8 @@ from references.detection.engine import train_one_epoch, evaluate
 from references.detection import utils, coco_eval, coco_utils
 from utils_pkg import PennFudanDataset, get_transform, get_model_instance_segmentation
 
+def worker_init_fn(worker_id):
+    torch.manual_seed(1 + worker_id)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -25,11 +27,11 @@ dataset_test = torch.utils.data.Subset(dataset_test, indices[-50:])
 
 # define training and validation data loaders
 data_loader = torch.utils.data.DataLoader(
-    dataset, batch_size=2, shuffle=True, num_workers=4, collate_fn=utils.collate_fn
+    dataset, batch_size=2, shuffle=True, num_workers=4, collate_fn=utils.collate_fn, worker_init_fn=worker_init_fn 
 )
 
 data_loader_test = torch.utils.data.DataLoader(
-    dataset_test, batch_size=1, shuffle=False, num_workers=4, collate_fn=utils.collate_fn
+    dataset_test, batch_size=1, shuffle=False, num_workers=4, collate_fn=utils.collate_fn, worker_init_fn=worker_init_fn 
 )
 
 # get the model using our helper function
