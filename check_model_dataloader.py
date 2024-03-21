@@ -24,7 +24,7 @@ images = list(image for image in images)
 targets = [{k: v for k, v in t.items()} for t in targets]
 output = model(images, targets)   # Returns losses and detections
 print(output)
-
+print("NEXT")
 # For inference
 model.eval()
 x = [torch.rand(3, 300, 400), torch.rand(3, 500, 400)]
